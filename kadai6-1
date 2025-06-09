@@ -1,0 +1,30 @@
+import requests
+import json
+
+APP_ID = 'ここに自分のappIdを入れる'
+
+stats_data_id = '0003423319'
+
+url = 'https://api.e-stat.go.jp/rest/3.0/app/json/getStatsData'
+
+params = {
+    'appId': APP_ID,
+    'statsDataId': stats_data_id,
+    'lang': 'J',  # 日本語
+    'metaGetFlg': 'N',
+    'cntGetFlg': 'N',
+    'sectionHeaderFlg': '1'
+}
+
+response = requests.get(url, params=params)
+
+data = response.json()
+
+print("【完全失業率データ（抜粋）】")
+try:
+    for record in data['GET_STATS_DATA']['STATISTICAL_DATA']['DATA_INF']['VALUE'][:10]:
+        time = record['@time']
+        value = record['$']
+        print(f"{time}: {value}%")
+except Exception as e:
+    print("データ取得に失敗しました:", e)
