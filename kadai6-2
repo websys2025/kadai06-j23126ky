@@ -1,0 +1,20 @@
+import requests
+import json
+
+station_code = '44132'
+
+url = f'https://www.jma.go.jp/bosai/amedas/data/latest_obs/{station_code}.json'
+
+response = requests.get(url)
+data = response.json()
+
+print("【気象庁アメダス・東京の観測データ】")
+
+try:
+    time_info = data['time']
+    temp_data = data[station_code]['temp'][0]  # 最新の気温データ（0番目）
+
+    print(f"観測時刻: {time_info}")
+    print(f"気温: {temp_data} ℃")
+except Exception as e:
+    print("データ取得または処理に失敗しました:", e)
